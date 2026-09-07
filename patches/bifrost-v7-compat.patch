@@ -1,0 +1,35 @@
+diff --git a/src/panfrost/encoder/pan_encoder.h b/src/panfrost/encoder/pan_encoder.h
+index 1234567..abcdefg 100644
+--- a/src/panfrost/encoder/pan_encoder.h
++++ b/src/panfrost/encoder/pan_encoder.h
+@@ -45,6 +45,15 @@
+ #endif
+ };
+ 
++/* Fix for Bifrost v7 Mali-G76 syncobj timeout issue */
++#if defined(PAN_ARCH) && PAN_ARCH == 7
++/* Increase timeout for Job Manager synchronization */
++#define PAN_SYNCOBJ_TIMEOUT_MS 1000  /* 1 second instead of 10ms */
++#else
++#define PAN_SYNCOBJ_TIMEOUT_MS 10
++#endif
++
+ /* Helper to calculate optimal BO size */
+ 
+ diff --git a/src/panfrost/vulkan/panvk_device.c b/src/panfrost/vulkan/panvk_device.c
+index 2345678..cdefgh 100644
+--- a/src/panfrost/vulkan/panvk_device.c
++++ b/src/panfrost/vulkan/panvk_device.c
+@@ -120,6 +120,12 @@
+         .maxMemoryAllocationCount = 4096,
+         .bufferImageGranularity = 256,
+     };
++
++    /* Mali-G76 Bifrost workaround: reduce complex features */
++    if (pan_device_gpu_id(dev) == 0x7500) {
++        props->limits.maxPushConstantsSize = 128;
++        props->limits.maxMemoryAllocationCount = 2048;
++    }
+ 
+     return VK_SUCCESS;
+ }
