@@ -27,8 +27,8 @@ echo ""
 # STEP 1: Update and install dependencies
 # ==========================================================
 echo -e "${YELLOW}[STEP 1/5] Installing dependencies...${NC}"
-sudo apt update -y && sudo apt upgrade -y
-sudo apt install -y git meson ninja build-essential cmake python3 \
+sudo pkg update -y && sudo pkg upgrade -y
+sudo pkg install -y git meson ninja build-essential cmake python3 \
     termux-x11 x11-repo glmark2 glxgears glxinfo \
     android-ndk binutils wget curl libglvnd-dev vulkan-tools
 
