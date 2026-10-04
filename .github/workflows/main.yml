@@ -1,0 +1,23 @@
+name: Build Android .so
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: 1
+        run: |
+          bash complete_build.sh
+  
+      - name: Upload .so
+        uses: actions/upload-artifact@v4
+        with:
+          name: lib
+          path: ./.panfrost
